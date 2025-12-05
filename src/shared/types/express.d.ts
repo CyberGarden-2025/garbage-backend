@@ -1,4 +1,4 @@
-import { AuthCredentials } from 'src/auth/guards/auth.guard';
+import { AuthCredentials } from 'src/shared/guards/auth.guard';
 
 declare global {
   namespace Express {

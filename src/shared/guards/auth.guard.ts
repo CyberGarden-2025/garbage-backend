@@ -3,16 +3,21 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { comparePasswords } from '../utils/password.utils';
 
 export type AuthCredentials = {
   login: string;
-  password: String;
+  password: string;
 };
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(private prisma: PrismaService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
@@ -24,7 +29,28 @@ export class AuthGuard implements CanActivate {
       );
     }
 
+    Logger.log(`Authenticated user: ${credentials.login}`, 'AuthGuard');
+
+    const user = await this.prisma.user.findUnique({
+      where: { login: credentials.login },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await comparePasswords(
+      credentials.password,
+      user.hashedPassword,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     request['credentials'] = credentials;
+
+    Logger.log(`Authorized user: ${credentials.login}`, 'AuthGuard');
 
     return true;
   }
