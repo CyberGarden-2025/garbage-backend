@@ -1,7 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiBody } from '@nestjs/swagger';
+import { ApiOperation, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { RegisterDto } from './dto/register.dto';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,5 +15,14 @@ export class AuthController {
   })
   async register(@Body() data: RegisterDto) {
     return this.authService.register(data);
+  }
+
+  @Post('/test')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async test(@Req() request) {
+    return {
+      credentials: request.credentials,
+    };
   }
 }
