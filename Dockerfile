@@ -7,20 +7,14 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma
 
-# Устанавливаем ВСЕ зависимости, включая dev
 RUN npm install
 
-# Генерация Prisma Client
 RUN npx prisma generate
 
 COPY . .
 
-# Сборка проекта NestJS
 RUN npm run build
 
-# -------------------------
-# Production image
-# -------------------------
 FROM node:20-slim
 
 RUN apt-get update -y && apt-get install -y openssl
