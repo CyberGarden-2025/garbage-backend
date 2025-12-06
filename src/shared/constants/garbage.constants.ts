@@ -33,23 +33,14 @@ export const GARBAGE_SUBTYPES = [
   'foam_egg',
   'foam_building',
   'foam_food',
-  'blister_pack',
-  'toothbrush',
-  'plastic_card',
-  'tube',
-  'receipt',
   'unknown',
 ] as const;
 
 export const GARBAGE_STATES = [
   'clean',
   'dirty',
-  'heavily_dirty',
   'food_contaminated',
   'with_labels',
-  'no_labels',
-  'compressed',
-  'damaged',
   'unknown',
 ] as const;
 
