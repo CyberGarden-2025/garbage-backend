@@ -8,7 +8,9 @@
       "Bash(fi)",
       "Bash(npm run db:generate:*)",
       "Bash(npm run db:migrate:dev:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(if [ -f .github/copilot-instructions.md ])",
+      "Bash(then cat .github/copilot-instructions.md)"
     ],
     "deny": [],
     "ask": []

@@ -13,8 +13,12 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: '*',
+    origin: true, // Разрешает любой origin и автоматически отражает его в заголовке
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Authorization'],
+    maxAge: 3600,
   });
 
   app.useGlobalPipes(
@@ -48,6 +52,8 @@ async function bootstrap() {
       persistAuthorization: true,
       withCredentials: true,
     },
+    jsonDocumentUrl: 'openapi.json',
+    yamlDocumentUrl: 'openapi.yaml',
   });
 
   await app.listen(port ?? 4000);
