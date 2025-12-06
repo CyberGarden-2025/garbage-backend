@@ -108,6 +108,7 @@ export class QuestsService {
       id: `daily_${index}_${Date.now()}`,
       goal,
       subject,
+      reward: COINS.DAILY_QUEST_REWARD,
       createdAt: new Date().toISOString(),
     };
   }
@@ -182,6 +183,7 @@ export class QuestsService {
       id: `weekly_${Date.now()}`,
       goal,
       subject,
+      reward: COINS.WEEKLY_QUEST_REWARD,
       createdAt: new Date().toISOString(),
     };
   }
@@ -286,6 +288,16 @@ export class QuestsService {
           },
         });
 
+        await this.prisma.garbageHistory.create({
+          data: {
+            userId: pointId,
+            garbageType: 'quest_reward',
+            garbageSubtype: 'daily_quest',
+            garbageState: 'completed',
+            coinAmount: COINS.DAILY_QUEST_REWARD,
+          },
+        });
+
         reward = COINS.DAILY_QUEST_REWARD;
         Logger.log(
           `Point ${pointId} completed daily quest ${quest.id}! Reward: ${reward}`,
@@ -368,6 +380,16 @@ export class QuestsService {
         where: { id: pointId },
         data: {
           balance: { increment: COINS.WEEKLY_QUEST_REWARD },
+        },
+      });
+
+      await this.prisma.garbageHistory.create({
+        data: {
+          userId: pointId,
+          garbageType: 'quest_reward',
+          garbageSubtype: 'weekly_quest',
+          garbageState: 'completed',
+          coinAmount: COINS.WEEKLY_QUEST_REWARD,
         },
       });
 

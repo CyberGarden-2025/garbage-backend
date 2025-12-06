@@ -18,6 +18,9 @@ class QuestResponse {
   @ApiProperty({ type: QuestSubjectResponse })
   subject: QuestSubjectResponse;
 
+  @ApiProperty({ example: 100 })
+  reward: number;
+
   @ApiProperty({ example: '2025-12-06T00:00:00.000Z' })
   createdAt: string;
 }

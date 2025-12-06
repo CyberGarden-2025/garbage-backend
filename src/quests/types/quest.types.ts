@@ -12,6 +12,7 @@ export type DailyQuest = {
   id: string;
   goal: number;
   subject: QuestSubject;
+  reward: number;
   createdAt: string;
 };
 
@@ -19,6 +20,7 @@ export type WeeklyQuest = {
   id: string;
   goal: number;
   subject: QuestSubject;
+  reward: number;
   createdAt: string;
 };
 
