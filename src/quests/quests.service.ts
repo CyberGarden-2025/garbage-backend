@@ -17,6 +17,7 @@ import {
   QUEST_KEYS,
 } from '../shared/constants/garbage.constants';
 import { COINS } from '../shared/constants/coins.constants';
+import { toSeconds } from 'src/shared/utils/ms.utils';
 
 const DAILY_QUEST_COUNT = 3;
 
@@ -40,7 +41,11 @@ export class QuestsService {
       quests.push(quest);
     }
 
-    await this.redis.set(QUEST_KEYS.DAILY_CONFIG, JSON.stringify(quests));
+    await this.redis.set(
+      QUEST_KEYS.DAILY_CONFIG,
+      JSON.stringify(quests),
+      toSeconds('1d'),
+    );
 
     Logger.log(
       `New daily quests created: ${JSON.stringify(quests)}`,
@@ -115,7 +120,11 @@ export class QuestsService {
 
     const quest = this.createRandomWeeklyQuest();
 
-    await this.redis.set(QUEST_KEYS.WEEKLY_CONFIG, JSON.stringify(quest));
+    await this.redis.set(
+      QUEST_KEYS.WEEKLY_CONFIG,
+      JSON.stringify(quest),
+      toSeconds('1w'),
+    );
 
     Logger.log(
       `New weekly quest created: ${JSON.stringify(quest)}`,
@@ -267,6 +276,7 @@ export class QuestsService {
         await this.redis.set(
           QUEST_KEYS.DAILY_COMPLETED(pointId, quest.id),
           'true',
+          toSeconds('1d'),
         );
 
         await this.prisma.user.update({
@@ -348,7 +358,11 @@ export class QuestsService {
     let reward: number | undefined;
 
     if (completed && newProgress === quest.goal) {
-      await this.redis.set(QUEST_KEYS.WEEKLY_COMPLETED(pointId), 'true');
+      await this.redis.set(
+        QUEST_KEYS.WEEKLY_COMPLETED(pointId),
+        'true',
+        toSeconds('1w'),
+      );
 
       await this.prisma.user.update({
         where: { id: pointId },

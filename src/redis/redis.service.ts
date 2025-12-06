@@ -17,8 +17,12 @@ export class RedisService implements OnModuleDestroy {
     return this.redis.get(key);
   }
 
-  async set(key: string, value: string): Promise<void> {
-    await this.redis.set(key, value);
+  async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
+    if (ttlSeconds) {
+      await this.redis.setex(key, ttlSeconds, value);
+    } else {
+      await this.redis.set(key, value);
+    }
   }
 
   async incr(key: string): Promise<number> {
