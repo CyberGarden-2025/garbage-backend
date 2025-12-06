@@ -53,6 +53,6 @@ async function bootstrap() {
   await app.listen(port ?? 4000);
 
   Logger.log(`Application successfully started on port: ${port}`, 'Main');
-  Logger.log(`Swager url is: ${swaggerURL}:${port}/${swaggerPath}`, 'Main');
+  Logger.log(`Swagger URL is: ${swaggerURL}:${port}/${swaggerPath}`, 'Main');
 }
 bootstrap();

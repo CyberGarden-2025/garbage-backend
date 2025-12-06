@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -f .cursorrules ])",
+      "Bash(then cat .cursorrules)",
+      "Bash(elif [ -d .cursor/rules ])",
+      "Bash(then ls .cursor/rules)",
+      "Bash(fi)",
+      "Bash(npm run db:generate:*)",
+      "Bash(npm run db:migrate:dev:*)",
+      "Bash(npm run build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
