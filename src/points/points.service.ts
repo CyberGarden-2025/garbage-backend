@@ -12,6 +12,7 @@ import { PointResponse } from './point.mapper';
 import type { UpdatePointDto } from './dto/update.dto';
 import { GetAllPointsDto } from './dto/get-all-points.dto';
 import { PaginatedPointResponse } from './swagger/point.response';
+import { getDateFrom } from 'src/shared/utils/date.utils';
 
 @Injectable()
 export class PointsService {
@@ -115,18 +116,17 @@ export class PointsService {
   }
 
   async getAllPoints(query: GetAllPointsDto): Promise<PaginatedPointResponse> {
-    const { page = 1, limit = 10, sortByName, score } = query;
+    const { page = 1, limit = 10, sortByName, score, sortByScore } = query;
     const skip = (page - 1) * limit;
 
     const where: any = {};
-
     const orderBy: any = {};
 
     if (sortByName) {
       orderBy.name = sortByName;
     }
 
-    const [data, total] = await Promise.all([
+    const [users, total] = await Promise.all([
       this.prismaService.user.findMany({
         where,
         orderBy: Object.keys(orderBy).length ? orderBy : undefined,
@@ -136,8 +136,46 @@ export class PointsService {
       this.prismaService.user.count({ where }),
     ]);
 
+    let usersWithScore: Array<PointResponse & { score?: number }> = users.map(
+      PointMapper.toResponse,
+    );
+
+    if (score) {
+      const dateFrom = getDateFrom(score);
+      const userIds = users.map((u) => u.id);
+
+      const scoreData = await this.prismaService.garbageHistory.groupBy({
+        by: ['userId'],
+        where: {
+          userId: { in: userIds },
+          createdAt: { gte: dateFrom },
+        },
+        _sum: {
+          coinAmount: true,
+        },
+      });
+
+      const scoreMap = new Map<string, number>();
+      for (const item of scoreData) {
+        scoreMap.set(item.userId, item._sum.coinAmount || 0);
+      }
+
+      usersWithScore = users.map((user) => ({
+        ...PointMapper.toResponse(user),
+        score: scoreMap.get(user.id) || 0,
+      }));
+
+      if (sortByScore) {
+        usersWithScore.sort((a, b) =>
+          sortByScore === 'desc'
+            ? (b.score ?? 0) - (a.score ?? 0)
+            : (a.score ?? 0) - (b.score ?? 0),
+        );
+      }
+    }
+
     return {
-      data: data.map(PointMapper.toResponse),
+      data: usersWithScore,
       total,
       page,
       limit,

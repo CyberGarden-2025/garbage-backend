@@ -4,10 +4,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { COINS } from 'src/shared/constants/coins.constants';
 import { PointMapper } from 'src/points/point.mapper';
 import { DisposalsMapper } from './disposals.mapper';
+import { QuestsService } from 'src/quests/quests.service';
 
 @Injectable()
 export class DisposalsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly questsService: QuestsService,
+  ) {}
 
   async createDisposal(data: CreateDisposalDto) {
     Logger.log(
@@ -35,6 +39,12 @@ export class DisposalsService {
         },
       },
     });
+
+    await this.questsService.updateProgress(
+      data.pointId,
+      data.type,
+      data.subtype,
+    );
 
     return {
       disposal: DisposalsMapper.toResponse(disposal),

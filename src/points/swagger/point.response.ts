@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PointResponse {
   @ApiProperty({ example: 'Point Name' })
@@ -12,6 +12,12 @@ export class PointResponse {
 
   @ApiProperty({ example: 100 })
   balance: number;
+
+  @ApiPropertyOptional({
+    example: 150,
+    description: 'Score for selected period',
+  })
+  score?: number;
 }
 
 export class PaginatedPointResponse {

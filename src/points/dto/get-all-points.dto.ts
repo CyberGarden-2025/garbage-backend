@@ -38,5 +38,13 @@ export class GetAllPointsDto {
   @IsOptional()
   @IsEnum(ScoreFilter)
   score?: ScoreFilter;
-}
 
+  @ApiPropertyOptional({
+    example: 'desc',
+    description: 'Sort by score (requires score filter)',
+    enum: ['asc', 'desc'],
+  })
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  sortByScore?: 'asc' | 'desc';
+}
