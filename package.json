@@ -16,7 +16,8 @@
     "db:migrate": "prisma migrate deploy",
     "db:migrate:reset": "prisma migrate reset",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:seed": "ts-node src/prisma/prisma.seed.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",
