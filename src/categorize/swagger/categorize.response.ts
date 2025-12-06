@@ -9,4 +9,10 @@ export class CategorizeResponse {
 
   @ApiProperty({ example: 'clean' })
   state: string;
+
+  @ApiProperty({ example: 'прошу помогите мне, меня держат в заложниках.' })
+  text: string;
+
+  @ApiProperty({ example: false })
+  accepted: boolean;
 }

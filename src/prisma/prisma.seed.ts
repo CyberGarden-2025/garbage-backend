@@ -1,6 +1,7 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 import { PrismaClient } from '../../generated/prisma';
 import * as bcrypt from 'bcrypt';
+import { parseAdviceCsv } from '../shared/utils/csv.utils';
 
 const prisma = new PrismaClient();
 
@@ -12,6 +13,35 @@ async function hashPassword(password: string): Promise<string> {
 async function main() {
   try {
     Logger.log('Starting seeding...');
+
+    Logger.log(`Seeding Advice data...`);
+
+    const adviceData = parseAdviceCsv();
+
+    for (const advice of adviceData) {
+      Logger.log(`Seeding advice: ${JSON.stringify(advice)}`);
+
+      await prisma.advice.upsert({
+        where: {
+          garbageType_garbageSubtype_garbageState: {
+            garbageType: advice.type,
+            garbageSubtype: advice.subtype,
+            garbageState: advice.state,
+          },
+        },
+        create: {
+          garbageType: advice.type,
+          garbageSubtype: advice.subtype,
+          garbageState: advice.state,
+          accepted: advice.accepted,
+          text: advice.text,
+        },
+        update: {
+          accepted: advice.accepted,
+          text: advice.text,
+        },
+      });
+    }
 
     const adminLogin = 'admin';
     const adminPassword = 'admin';

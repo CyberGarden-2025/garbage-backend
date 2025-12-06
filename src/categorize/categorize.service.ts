@@ -1,3 +1,4 @@
+import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -5,7 +6,10 @@ import { ConfigService } from '@nestjs/config';
 export class CategorizeService {
   private readonly apiUrl: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService,
+  ) {
     this.apiUrl = this.configService.getOrThrow<string>('ML_API_URL');
   }
 
@@ -78,6 +82,22 @@ export class CategorizeService {
 
       if (result.status === 'DONE') {
         Logger.log(`Task ${taskId} completed`, 'CategorizeService');
+
+        const adviceData = await this.prismaService.advice.findUnique({
+          where: {
+            garbageType_garbageSubtype_garbageState: {
+              garbageType: result.result.items[0].type,
+              garbageSubtype: result.result.items[0].subtype,
+              garbageState: result.result.items[0].state,
+            },
+          },
+        });
+
+        if (adviceData) {
+          result.result.items[0].text = adviceData.text;
+          result.result.items[0].accepted = adviceData.accepted;
+        }
+
         return result.result.items[0];
       }
 

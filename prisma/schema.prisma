@@ -45,3 +45,17 @@ model PackagingRecords {
 
   @@map("packaging_records")
 }
+
+model Advice {
+    garbageType String @map("garbage_type")
+    garbageSubtype String @map("garbage_subtype")
+    garbageState String @map("garbage_state")
+
+    accepted Boolean
+    text String
+
+
+    @@id([garbageType, garbageSubtype, garbageState])
+    @@map("advice")
+}
+
