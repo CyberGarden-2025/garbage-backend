@@ -14,7 +14,7 @@ import { GetAllPointsDto } from './dto/get-all-points.dto';
 import { PaginatedPointResponse } from './swagger/point.response';
 
 @Injectable()
-export class PointService {
+export class PointsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(data: CreatePointDto): Promise<PointResponse> {

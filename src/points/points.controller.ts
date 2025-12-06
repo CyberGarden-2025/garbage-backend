@@ -9,7 +9,7 @@ import {
   Patch,
   Query,
 } from '@nestjs/common';
-import { PointService } from './point.service';
+import { PointsService } from './points.service';
 import {
   ApiOperation,
   ApiBody,
@@ -28,8 +28,8 @@ import { UpdatePointDto } from './dto/update.dto';
 import { GetAllPointsDto } from './dto/get-all-points.dto';
 
 @Controller('points')
-export class PointController {
-  constructor(private readonly pointService: PointService) {}
+export class PointsController {
+  constructor(private readonly pointsService: PointsService) {}
 
   @Post('/')
   @ApiOperation({ summary: 'create a new point' })
@@ -42,7 +42,7 @@ export class PointController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, AdminGuard)
   async create(@Body() data: CreatePointDto) {
-    return this.pointService.create(data);
+    return this.pointsService.create(data);
   }
 
   @Get('/:id')
@@ -53,7 +53,7 @@ export class PointController {
     type: PointResponse,
   })
   async getPoint(@Param('id') id: string) {
-    return this.pointService.getPointById(id);
+    return this.pointsService.getPointById(id);
   }
 
   @Get('/')
@@ -64,7 +64,7 @@ export class PointController {
     type: PaginatedPointResponse,
   })
   async getAllPoints(@Query() query: GetAllPointsDto) {
-    return this.pointService.getAllPoints(query);
+    return this.pointsService.getAllPoints(query);
   }
 
   @Delete('/:id')
@@ -75,7 +75,7 @@ export class PointController {
   })
   @UseGuards(AuthGuard, AdminGuard)
   async deletePoint(@Param('id') id: string) {
-    return this.pointService.deletePointById(id);
+    return this.pointsService.deletePointById(id);
   }
 
   @Patch('/:id')
@@ -89,6 +89,6 @@ export class PointController {
   })
   @UseGuards(AuthGuard, AdminGuard)
   async updatePoint(@Param('id') id: string, @Body() data: UpdatePointDto) {
-    return this.pointService.updatePointById(id, data);
+    return this.pointsService.updatePointById(id, data);
   }
 }

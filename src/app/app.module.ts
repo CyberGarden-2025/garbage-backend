@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PointModule } from '../point/point.module';
+import { PointsModule } from '../points/points.module';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -11,7 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    PointModule,
+    PointsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: join(process.cwd(), '.env'),

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateDisposalDto } from './dto/create-disposal.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { COINS } from 'src/shared/constants/coins.constants';
-import { PointMapper } from 'src/point/point.mapper';
+import { PointMapper } from 'src/points/point.mapper';
 import { DisposalsMapper } from './disposals.mapper';
 
 @Injectable()
