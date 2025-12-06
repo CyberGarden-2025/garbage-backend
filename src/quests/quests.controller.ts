@@ -1,6 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { QuestsService } from './quests.service';
-import { ApiOperation, ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { AllQuestsResponse } from './swagger/quests.response';
 import { AuthGuard } from '@/shared/guards/auth.guard';
 
@@ -10,20 +15,17 @@ export class QuestsController {
 
   @Get('/')
   @ApiOperation({ summary: 'Get all current quests (daily + weekly)' })
+  @ApiQuery({
+    name: 'pointId',
+    required: true,
+    description: 'Point ID to get progress for',
+  })
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     type: AllQuestsResponse,
   })
-  async getAllQuests() {
-    const [daily, weekly] = await Promise.all([
-      this.questsService.getCurrentDailyQuests(),
-      this.questsService.getCurrentWeeklyQuest(),
-    ]);
-
-    return {
-      daily,
-      weekly,
-    };
+  async getAllQuests(@Query('pointId') pointId: string) {
+    return this.questsService.getAllQuestsProgress(pointId);
   }
 }

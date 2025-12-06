@@ -40,11 +40,13 @@ export class DisposalsService {
       },
     });
 
-    await this.questsService.updateProgress(
+    const updatedProgress = await this.questsService.updateProgress(
       data.pointId,
       data.type,
       data.subtype,
     );
+
+    console.log(updatedProgress);
 
     return {
       disposal: DisposalsMapper.toResponse(disposal),
