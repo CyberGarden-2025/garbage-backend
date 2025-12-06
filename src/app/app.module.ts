@@ -9,6 +9,7 @@ import { DisposalsModule } from '@/disposals/disposals.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { QuestsModule } from '@/quests/quests.module';
 import { RedisModule } from '@/redis/redis.module';
+import { LeaderboardModule } from '@/leaderboard/leaderboard.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RedisModule } from '@/redis/redis.module';
     QuestsModule,
     RedisModule,
     ScheduleModule.forRoot(),
+    LeaderboardModule,
   ],
   controllers: [],
   providers: [],
