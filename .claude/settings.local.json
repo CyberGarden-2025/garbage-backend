@@ -10,7 +10,9 @@
       "Bash(npm run db:migrate:dev:*)",
       "Bash(npm run build:*)",
       "Bash(if [ -f .github/copilot-instructions.md ])",
-      "Bash(then cat .github/copilot-instructions.md)"
+      "Bash(then cat .github/copilot-instructions.md)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npx prisma migrate deploy:*)"
     ],
     "deny": [],
     "ask": []

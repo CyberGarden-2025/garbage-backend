@@ -51,7 +51,7 @@ export class CategorizeController {
       new ParseFilePipe({
         validators: [
           new FileTypeValidator({ fileType: /(jpg|jpeg|png|webp)$/ }),
-          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), // 5MB
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
         ],
       }),
     )

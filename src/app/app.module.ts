@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { PointsModule } from '../points/points.module';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
-import { PrismaModule } from '../prisma/prisma.module';
-import { CategorizeModule } from 'src/categorize/categorize.module';
-import { DisposalsModule } from 'src/disposals/disposals.module';
-import { QuestsModule } from 'src/quests/quests.module';
-import { RedisModule } from 'src/redis/redis.module';
+
 import { ScheduleModule } from '@nestjs/schedule';
+import { CategorizeModule } from '@/categorize/categorize.module';
+import { DisposalsModule } from '@/disposals/disposals.module';
+import { PrismaModule } from '@/prisma/prisma.module';
+import { QuestsModule } from '@/quests/quests.module';
+import { RedisModule } from '@/redis/redis.module';
 
 @Module({
   imports: [
