@@ -37,6 +37,8 @@ export class CategorizeService {
 
       const taskId = result.task_id;
 
+      console.log(taskId);
+
       if (!taskId) {
         throw new HttpException('No task_id received', 500);
       }
@@ -53,7 +55,7 @@ export class CategorizeService {
   private async waitForResult(
     taskId: number,
     maxAttempts = 100,
-    delayMs = 10000,
+    delayMs = 1000,
   ) {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       Logger.log(

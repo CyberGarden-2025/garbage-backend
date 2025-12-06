@@ -12,25 +12,36 @@ model User {
   id             String   @id @default(uuid())
   name           String   @unique
   login          String   @unique
-  hashedPassword String
+  hashedPassword String   @map("hashed_password")
   balance        Int      @default(0)
-  isAdmin        Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  isAdmin        Boolean  @default(false) @map("is_admin")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   garbageHistory GarbageHistory[]
+
+  @@map("user")
 }
 
 model GarbageHistory {
   id             String   @id @default(uuid())
-  userId         String
-  garbageType    String
-  garbageSubtype String
-  garbageState   String
-  coinAmount     Int
-  createdAt      DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
+  userId         String   @map("user_id")
+  garbageType    String   @map("garbage_type")
+  garbageSubtype String   @map("garbage_subtype")
+  garbageState   String   @map("garbage_state")
+  coinAmount     Int      @map("coin_amount")
+  createdAt      DateTime @default(now()) @map("created_at")
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
+  @@map("garbage_history")
+}
+
+model PackagingRecords {
+  code      String   @unique
+  items     Json
+  source    String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("packaging_records")
 }
