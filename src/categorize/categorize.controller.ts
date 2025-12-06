@@ -6,6 +6,8 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   ParseFilePipe,
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { CategorizeService } from './categorize.service';
 import {
@@ -13,9 +15,11 @@ import {
   ApiConsumes,
   ApiBody,
   ApiOkResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CategorizeResponse } from './swagger/categorize.response';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('categorize')
 export class CategorizeController {
@@ -39,6 +43,9 @@ export class CategorizeController {
     type: CategorizeResponse,
   })
   @UseInterceptors(FileInterceptor('image'))
+  @HttpCode(200)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   async categorizeItem(
     @UploadedFile(
       new ParseFilePipe({

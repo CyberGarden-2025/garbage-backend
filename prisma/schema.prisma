@@ -14,7 +14,23 @@ model User {
   login          String   @unique
   hashedPassword String
   balance        Int      @default(0)
-  isAdmin       Boolean  @default(false)
+  isAdmin        Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  garbageHistory GarbageHistory[]
+}
+
+model GarbageHistory {
+  id             String   @id @default(uuid())
+  userId         String
+  garbageType    String
+  garbageSubtype String
+  garbageState   String
+  coinAmount     Int
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }

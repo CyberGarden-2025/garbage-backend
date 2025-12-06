@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { PrismaModule } from '../prisma/prisma.module';
 import { CategorizeModule } from 'src/categorize/categorize.module';
+import { DisposalsModule } from 'src/disposals/disposals.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CategorizeModule } from 'src/categorize/categorize.module';
     }),
     PrismaModule,
     CategorizeModule,
+    DisposalsModule,
   ],
   controllers: [],
   providers: [],

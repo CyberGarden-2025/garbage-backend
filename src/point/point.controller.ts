@@ -39,6 +39,8 @@ export class PointController {
   @ApiOkResponse({
     type: PointResponse,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminGuard)
   async create(@Body() data: CreatePointDto) {
     return this.pointService.create(data);
   }

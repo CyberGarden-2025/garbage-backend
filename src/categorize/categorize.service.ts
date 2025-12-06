@@ -76,7 +76,7 @@ export class CategorizeService {
 
       if (result.status === 'DONE') {
         Logger.log(`Task ${taskId} completed`, 'CategorizeService');
-        return result.result;
+        return result.result.items[0];
       }
 
       await this.sleep(delayMs);
