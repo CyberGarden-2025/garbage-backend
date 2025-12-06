@@ -30,48 +30,7 @@ export class CategorizeService {
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new HttpException(
-          `ML API error: ${response.statusText}`,
-          response.status,
-        );
-      }
-
-      const result = (await response.json()) as { task_id: string };
-
-      const taskId = result.task_id;
-
-      console.log(taskId);
-
-      if (!taskId) {
-        throw new HttpException('No task_id received', 500);
-      }
-
-      Logger.log(`Task created: ${taskId}`, 'CategorizeService');
-
-      return await this.waitForResult(Number(taskId));
-    } catch (error) {
-      Logger.error(`ML API error: ${error.message}`, 'CategorizeService');
-      throw new HttpException('Failed to categorize image', 500);
-    }
-  }
-
-  private async waitForResult(
-    taskId: number,
-    maxAttempts = 100,
-    delayMs = 1000,
-  ) {
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      Logger.log(
-        `Polling attempt ${attempt}/${maxAttempts} for task ${taskId}`,
-        'CategorizeService',
-      );
-
-      const response = await fetch(`${this.apiUrl}${taskId}`, {
-        method: 'GET',
-      });
-
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new HttpException(
           `ML API error: ${response.statusText}`,
           response.status,
@@ -80,32 +39,27 @@ export class CategorizeService {
 
       const result = await response.json();
 
-      if (result.status === 'DONE') {
-        Logger.log(`Task ${taskId} completed`, 'CategorizeService');
+      Logger.log(`Task completed`, 'CategorizeService');
 
-        const adviceData = await this.prismaService.advice.findUnique({
-          where: {
-            garbageType_garbageSubtype_garbageState: {
-              garbageType: result.result.items[0].type,
-              garbageSubtype: result.result.items[0].subtype,
-              garbageState: result.result.items[0].state,
-            },
+      const adviceData = await this.prismaService.advice.findUnique({
+        where: {
+          garbageType_garbageSubtype_garbageState: {
+            garbageType: result.items[0].type,
+            garbageSubtype: result.items[0].subtype,
+            garbageState: result.items[0].state,
           },
-        });
+        },
+      });
 
-        if (adviceData) {
-          result.result.items[0].text = adviceData.text;
-          result.result.items[0].accepted = adviceData.accepted;
-        }
-
-        return result.result.items[0];
+      if (adviceData) {
+        result.items[0].text = adviceData.text;
+        result.items[0].accepted = adviceData.accepted;
       }
 
-      await this.sleep(delayMs);
+      return result.items[0];
+    } catch (error) {
+      Logger.error(`ML API error: ${error.message}`, 'CategorizeService');
+      throw new HttpException('Failed to categorize image', 500);
     }
-  }
-
-  private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
