@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsInt, Min, IsEnum, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ScoreFilter } from 'src/shared/enums/score-filter.enum';
+import { ScoreFilter } from '@/shared/enums/score-filter.enum';
 
 export class GetAllPointsDto {
   @ApiPropertyOptional({ example: 1, description: 'Page number', default: 1 })

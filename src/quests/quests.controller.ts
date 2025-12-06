@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { QuestsService } from './quests.service';
 import { ApiOperation, ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { AllQuestsResponse } from './swagger/quests.response';
+import { AuthGuard } from '@/shared/guards/auth.guard';
 
 @Controller('quests')
 export class QuestsController {

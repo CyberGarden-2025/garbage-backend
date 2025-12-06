@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { QuestsService } from './quests.service';
 import { QuestsController } from './quests.controller';
-import { RedisModule } from 'src/redis/redis.module';
+import { RedisModule } from '@/redis/redis.module';
 
 @Module({
   imports: [RedisModule],

@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { CreatePointDto } from './dto/create.dto';
 import { Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { hashPassword } from 'src/shared/utils/password.utils';
 import { PointMapper } from './point.mapper';
 import { PointResponse } from './point.mapper';
 import type { UpdatePointDto } from './dto/update.dto';
 import { GetAllPointsDto } from './dto/get-all-points.dto';
 import { PaginatedPointResponse } from './swagger/point.response';
-import { getDateFrom } from 'src/shared/utils/date.utils';
+import { PrismaService } from '@/prisma/prisma.service';
+import { getDateFrom } from '@/shared/utils/date.utils';
+import { hashPassword } from '@/shared/utils/password.utils';
 
 @Injectable()
 export class PointsService {
@@ -137,7 +137,7 @@ export class PointsService {
     ]);
 
     let usersWithScore: Array<PointResponse & { score?: number }> = users.map(
-      PointMapper.toResponse,
+      (user) => PointMapper.toResponse(user),
     );
 
     if (score) {

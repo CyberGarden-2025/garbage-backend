@@ -18,7 +18,6 @@ import {
 } from '@nestjs/swagger';
 import { CreatePointDto } from './dto/create.dto';
 import { AuthGuard } from '../shared/guards/auth.guard';
-import { AdminGuard } from 'src/shared/guards/admin.guard';
 import {
   PaginatedPointResponse,
   PointResponse,
@@ -26,6 +25,7 @@ import {
 import { DeleteResponse } from './swagger/delete.response';
 import { UpdatePointDto } from './dto/update.dto';
 import { GetAllPointsDto } from './dto/get-all-points.dto';
+import { AdminGuard } from '@/shared/guards/admin.guard';
 
 @Controller('points')
 export class PointsController {
