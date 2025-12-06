@@ -1,3 +1,5 @@
 export const COINS = {
   DISPOSAL_REWARD: 10,
+  DAILY_QUEST_REWARD: 50,
+  WEEKLY_QUEST_REWARD: 500,
 } as const;
