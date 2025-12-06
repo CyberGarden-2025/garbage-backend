@@ -1,10 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 class QuestSubjectResponse {
-  @ApiPropertyOptional({ example: 'plastic' })
+  @ApiPropertyOptional({ example: 'Plastic' })
   type?: string;
 
-  @ApiPropertyOptional({ example: 'bottles' })
+  @ApiPropertyOptional({ example: 'pet_container' })
   subtype?: string;
 }
 
@@ -22,10 +22,21 @@ class QuestResponse {
   createdAt: string;
 }
 
-export class AllQuestsResponse {
-  @ApiProperty({ type: [QuestResponse] })
-  daily: QuestResponse[];
+class QuestProgressResponse {
+  @ApiProperty({ type: QuestResponse })
+  quest: QuestResponse;
 
-  @ApiProperty({ type: QuestResponse, nullable: true })
-  weekly: QuestResponse | null;
+  @ApiProperty({ example: 5 })
+  progress: number;
+
+  @ApiProperty({ example: false })
+  completed: boolean;
+}
+
+export class AllQuestsResponse {
+  @ApiProperty({ type: [QuestProgressResponse] })
+  daily: QuestProgressResponse[];
+
+  @ApiProperty({ type: QuestProgressResponse, nullable: true })
+  weekly: QuestProgressResponse | null;
 }
