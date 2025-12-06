@@ -12,7 +12,7 @@ export class CreateDisposalDto {
   @IsNotEmpty()
   pointId: string;
 
-  @ApiProperty({ example: 'Plastic' })
+  @ApiProperty({ example: 'plastic' })
   @IsString()
   @IsNotEmpty()
   @IsIn(GARBAGE_TYPES)
