@@ -13,7 +13,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: true, // Разрешает любой origin и автоматически отражает его в заголовке
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
@@ -61,4 +61,5 @@ async function bootstrap() {
   Logger.log(`Application successfully started on port: ${port}`, 'Main');
   Logger.log(`Swagger URL is: ${swaggerURL}:${port}/${swaggerPath}`, 'Main');
 }
+
 bootstrap();
